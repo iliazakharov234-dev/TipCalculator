@@ -96,6 +96,28 @@ fun TipScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
+
+        Spacer(Modifier.height(16.dp))
+
+        if (orderSum.isNotEmpty() && dishes > 0) {
+            val sum = orderSum.replace(',', '.').toDoubleOrNull() ?: 0.0
+            val tip = sum * tipPercent / 100
+            val discountAmount = sum * discount / 100
+            val total = sum + tip - discountAmount
+
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text("Сумма: ${"%.2f".format(sum)}")
+                    Text("Чаевые (${tipPercent.toInt()}%): ${"%.2f".format(tip)}")
+                    Text("Скидка ($discount%): -${"%.2f".format(discountAmount)}")
+                    Divider()
+                    Text("Итого: ${"%.2f".format(total)}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                }
+            }
+        }
     }
 }
 
