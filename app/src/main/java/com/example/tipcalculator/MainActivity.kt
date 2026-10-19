@@ -89,8 +89,8 @@ fun TipScreen(modifier: Modifier = Modifier) {
             listOf(3, 5, 7, 10).forEach { percent ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = false,
-                        onClick = { }
+                        selected = discount == percent,
+                        onClick = null
                     )
                     Text("$percent%", fontSize = 14.sp)
                 }
