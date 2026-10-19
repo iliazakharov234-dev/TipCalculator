@@ -81,6 +81,14 @@ fun TipScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("0", fontSize = 12.sp)
+            Text("25", fontSize = 12.sp)
+        }
+
         Text("Скидка:", fontSize = 16.sp, fontWeight = FontWeight.Medium)
         Row(
             modifier = Modifier.fillMaxWidth(),
