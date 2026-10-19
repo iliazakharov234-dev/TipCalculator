@@ -18,6 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tipcalculator.ui.theme.TipCalculatorTheme
 
+fun discountFor(dishCount: Int): Int = when {
+    dishCount <= 2 -> 3
+    dishCount in 3..5 -> 5
+    dishCount in 6..10 -> 7
+    else -> 10
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +45,15 @@ fun TipScreen(modifier: Modifier = Modifier) {
     var dishCount by remember { mutableStateOf("") }
     var tipPercent by remember { mutableFloatStateOf(0f) }
 
+    val dishes = dishCount.toIntOrNull() ?: 0
+    val discount = discountFor(dishes)
+
     Column(
         modifier = modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Калькулятор чаевых", fontSize = 24.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 
-        // Текстовые поля
         OutlinedTextField(
             value = orderSum,
             onValueChange = { if (it.all { char -> char.isDigit() || char == '.' || char == ',' }) orderSum = it },
@@ -63,7 +72,6 @@ fun TipScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Слайдер
         Text("Чаевые: ${tipPercent.toInt()}%", fontSize = 16.sp)
         Slider(
             value = tipPercent,
@@ -72,11 +80,31 @@ fun TipScreen(modifier: Modifier = Modifier) {
             steps = 24,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Text("Скидка:", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            listOf(3, 5, 7, 10).forEach { percent ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = false,
+                        onClick = { }
+                    )
+                    Text("$percent%", fontSize = 14.sp)
+                }
+            }
+        }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TipScreenPreview() {
-    TipCalculatorTheme { TipScreen() }
+    TipCalculatorTheme {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            TipScreen(modifier = Modifier.padding(innerPadding))
+        }
+    }
 }
